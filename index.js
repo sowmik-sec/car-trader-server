@@ -25,8 +25,14 @@ async function run() {
     await client.connect();
     const database = client.db("carTrader");
     const userCollection = database.collection("user");
+    app.get("/user", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.post("/user", async (req, res) => {
       const user = req.body;
+      console.log(user);
       const result = await userCollection.insertOne(user);
       res.send(result);
     });

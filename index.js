@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -42,7 +42,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    app.post("/add-car", async (req, res) => {
+    app.get("/car/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await carCollection.findOne(query);
+      res.send(result);
+    });
+    app.post("/car", async (req, res) => {
       const car = req.body;
       console.log(car);
       const result = await carCollection.insertOne(car);

@@ -37,6 +37,17 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
+    app.patch("/user", async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const updateDoc = {
+        $set: {
+          lastLoggedAt: user.lastLoggedAt,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
     app.get("/car", async (req, res) => {
       const cursor = carCollection.find();
       const result = await cursor.toArray();

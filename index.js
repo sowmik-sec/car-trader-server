@@ -54,6 +54,24 @@ async function run() {
       const result = await carCollection.insertOne(car);
       res.send(result);
     });
+    app.put("/car/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCar = req.body;
+      const car = {
+        $set: {
+          image: updatedCar.image,
+          model: updatedCar.model,
+          brandName: updatedCar.brandName,
+          type: updatedCar.type,
+          price: updatedCar.price,
+          shortDescription: updatedCar.shortDescription,
+          rating: updatedCar.rating,
+        },
+      };
+      const result = await carCollection.updateOne(filter, car, options);
+    });
     app.delete("/car/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
